@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drawing game</title>
+    <link rel="stylesheet" href="./dist/bundle.css">
+</head>
+<body>
+    <h1>Drawing game</h1>
+    <div class="colGr">
+        <div class="colGr__col_3">
+            <h2>Tools</h2>
+            <button class="tools__button" id="tool-erase-canvases">Erase</button>
+            <button class="tools__button" id="tool-save-source">Save Source</button>
+            <button class="tools__button" id="tool-compare-canvases">Compare</button>
+        </div>
+        <div class="colGr__col_9">
+            <h2>Drawing area</h2>
+            <div class="colGr">
+                <div class="colGr__col_6">
+                    <h3>Source Canvas</h3>
+                    <canvas class="gameCanvas" id="canvas-source"></canvas>
+                </div>
+                <div class="colGr__col_6">
+                    <h3>Destination Canvas</h3>
+                    <canvas class="gameCanvas gameCanvas_inactive" id="canvas-replica" inactive></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./dist/bundle.js"></script>
+</body>
+</html>

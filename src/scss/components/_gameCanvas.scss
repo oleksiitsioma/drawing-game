@@ -1,0 +1,15 @@
+.gameCanvas{
+
+    border: 5px solid $shamrock;
+    height: 400px;
+    width: 400px;
+    aspect-ratio: 1;
+
+    &_inactive{
+        cursor: not-allowed;
+        pointer-events: none;
+        border-color: $claret;
+        border-width: 5px;
+    }
+
+}
