@@ -5,9 +5,10 @@ const replicaCanvas = document.getElementById('canvas-replica');
 const eraseCanvasesButton = document.getElementById('tool-erase-canvases');
 const saveSourceCanvasButton = document.getElementById('tool-save-source');
 const compareCanvasesButton = document.getElementById('tool-compare-canvases');
+const overlapOutput = document.getElementById('tool-output-overlap');
 
 // Drawing
-const width = 10;
+const width = 20;
 
 const canvasInit = ( el ) => {
     const width = el.offsetWidth;
@@ -25,17 +26,22 @@ const getPosition = ( canvas , e ) =>{
     coord.x = e.clientX - canvas.offsetLeft;
     coord.y = e.clientY - canvas.offsetTop;
 }
+const getPositionTouch = ( canvas , e ) =>{
+    const touch = e.touches[0]
+    coord.x = touch.clientX - canvas.offsetLeft;
+    coord.y = touch.clientY - canvas.offsetTop;
+}
     
-const startPainting = ( canvas , e ) => {
+const startPainting = ( canvas , e , method ) => {
     paint = true;
-    getPosition( canvas , e );
+    method == 'touch' ? getPositionTouch( canvas , e ) : getPosition( canvas , e );
 }
 
 const stopPainting = () =>{
     paint = false;
 }
 
-const sketch = ( canvas , e ) => {
+const sketch = ( canvas , e , method ) => {
     if (!paint) return;
     ctx = canvas.getContext('2d');
     ctx.beginPath();
@@ -43,7 +49,7 @@ const sketch = ( canvas , e ) => {
     ctx.lineCap = 'round';
     ctx.strokeStyle = 'black';
     ctx.moveTo(coord.x, coord.y);
-    getPosition( canvas , e );
+    method == 'touch' ? getPositionTouch( canvas , e ) : getPosition( canvas , e );
     ctx.lineTo(coord.x , coord.y);
     ctx.stroke();
 }
@@ -52,12 +58,20 @@ for (let i = 0; i < canvases.length; i++) {
 
     canvasInit( canvases[i] );
     
-    canvases[i].addEventListener('pointerdown', (e) => {
-        startPainting( canvases[i] , e );
+    canvases[i].addEventListener('mousedown', (e) => {
+        startPainting( canvases[i] , e , 'mouse');
     });
     canvases[i].addEventListener('pointerup', stopPainting);
-    canvases[i].addEventListener('pointermove', (e) => {
-        sketch( canvases[i] , e)
+    canvases[i].addEventListener('pointerout', stopPainting);
+    canvases[i].addEventListener('touchcancel', stopPainting);
+    canvases[i].addEventListener('mousemove', (e) => {
+        sketch( canvases[i] , e , 'mouse' )
+    });
+    canvases[i].addEventListener('touchstart', (e) => {
+        startPainting( canvases[i] , e , 'touch' );
+    });
+    canvases[i].addEventListener('touchmove', (e) => {
+        sketch( canvases[i] , e , 'touch')
     });
 
 
@@ -70,8 +84,13 @@ const saveSourceCanvas = () =>{
     replicaCanvas.classList.remove('gameCanvas_inactive');
 }
 const eraseCanvases = () =>{
+    for (let i = 0; i < canvases.length; i++) {
+        const ctx = canvases[i].getContext('2d');
+        ctx.clearRect( 0 , 0 , canvases[i].offsetWidth , canvases[i].offsetHeight );
+    }
     sourceCanvas.classList.remove('gameCanvas_inactive');
     replicaCanvas.classList.add('gameCanvas_inactive');
+    overlapOutput.textContent = '';
 }
 
 const compareCanvases = ( source , replica ) => {
@@ -109,7 +128,7 @@ const compareCanvases = ( source , replica ) => {
 
     const comparisonRate = correctPixels / activePixels;
 
-    console.log( Math.round( comparisonRate * 100 ) + '%' );
+    overlapOutput.textContent = Math.round( comparisonRate * 100 ) + '%';
 
 
 }
