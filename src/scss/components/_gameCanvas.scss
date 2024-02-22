@@ -3,6 +3,7 @@
     border: 5px solid $shamrock;
     height: 400px;
     width: 400px;
+    max-width: 100%;
     aspect-ratio: 1;
 
     &_inactive{
@@ -11,5 +12,13 @@
         border-color: $claret;
         border-width: 5px;
     }
+
+    &__mobileButton{
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: $tabletWidthMax) {
 
 }

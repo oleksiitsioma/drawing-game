@@ -1,3 +1,5 @@
+const imagediff = require("imagediff");
+
 const canvases = document.getElementsByClassName('gameCanvas');
 const sourceCanvas = document.getElementById('canvas-source');
 const replicaCanvas = document.getElementById('canvas-replica');
@@ -6,9 +8,10 @@ const eraseCanvasesButton = document.getElementById('tool-erase-canvases');
 const saveSourceCanvasButton = document.getElementById('tool-save-source');
 const compareCanvasesButton = document.getElementById('tool-compare-canvases');
 const overlapOutput = document.getElementById('tool-output-overlap');
+const demo = document.getElementById('comparison__canvas')
 
 // Drawing
-const width = 20;
+const width = 30;
 
 const canvasInit = ( el ) => {
     const width = el.offsetWidth;
@@ -78,7 +81,6 @@ for (let i = 0; i < canvases.length; i++) {
 
 }
 
-
 const saveSourceCanvas = () =>{
     sourceCanvas.classList.add('gameCanvas_inactive');
     replicaCanvas.classList.remove('gameCanvas_inactive');
@@ -91,6 +93,7 @@ const eraseCanvases = () =>{
     sourceCanvas.classList.remove('gameCanvas_inactive');
     replicaCanvas.classList.add('gameCanvas_inactive');
     overlapOutput.textContent = '';
+    demo.innerHTML = ''
 }
 
 const compareCanvases = ( source , replica ) => {
@@ -130,6 +133,13 @@ const compareCanvases = ( source , replica ) => {
 
     overlapOutput.textContent = Math.round( comparisonRate * 100 ) + '%';
 
+    let diff, canvas, context;
+    diff = imagediff.diff( source , replica, {align: "top"} );
+    canvas = imagediff.createCanvas(diff.width, diff.height);
+    context = canvas.getContext('2d');
+    context.putImageData(diff, 0, 0);
+    demo.appendChild(canvas);
+    console.log( imagediff.equal(source, replica, 1500) )
 
 }
 
@@ -138,4 +148,3 @@ eraseCanvasesButton.addEventListener( 'click' , eraseCanvases);
 compareCanvasesButton.addEventListener( 'click' , () => {
     compareCanvases( sourceCanvas , replicaCanvas )
 });
-

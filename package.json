@@ -18,6 +18,12 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "imagediff": "^1.0.8",
     "jquery": "^3.6.4"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   }
 }
