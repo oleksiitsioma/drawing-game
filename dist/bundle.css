@@ -9,6 +9,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  overflow: hidden;
+}
+
 .colGr {
   display: grid;
   grid-template-columns: repeat(12, 1fr);

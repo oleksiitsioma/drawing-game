@@ -81,7 +81,7 @@ for (let i = 0; i < canvases.length; i++) {
 
 }
 
-const saveSourceCanvas = () =>{
+const saveSourceCanvas = ( source ) =>{
     sourceCanvas.classList.add('gameCanvas_inactive');
     replicaCanvas.classList.remove('gameCanvas_inactive');
 }
